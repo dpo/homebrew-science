@@ -36,7 +36,6 @@ else
     echo "log: $(git log -1)"
     export changed_files=`git diff-tree --no-commit-id --name-only HEAD^ HEAD | grep .rb`
 fi
-echo "to build: $changed_files"
 if [ -z "$changed_files" ]
 then
     echo "Nothing to test"
