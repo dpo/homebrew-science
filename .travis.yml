@@ -10,14 +10,14 @@ install:
  #- sudo rm -f /usr/local/clang-3.4/bin/llvm-config
 
  # Install gcc-4.9 system wide[Default is gcc-4.6]
- #- sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y > /dev/null
- #- sudo apt-get update -qq > /dev/null
- #- sudo apt-get install -y libyajl-dev libxml2-dev libxqilla-dev > /dev/null
- #- sudo apt-get install -y libstdc++-4.9-dev > /dev/null
- #- sudo apt-get install -y g++-4.9 gfortran-4.9 > /dev/null
- #- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90 > /dev/null
- #- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90 > /dev/null
- #- sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-4.9 90 > /dev/null
+ - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y > /dev/null
+ - sudo apt-get update -qq > /dev/null
+ - sudo apt-get install -y libyajl-dev libxml2-dev libxqilla-dev > /dev/null
+ - sudo apt-get install -y libstdc++-4.9-dev > /dev/null
+ - sudo apt-get install -y g++-4.9 gfortran-4.9 > /dev/null
+ - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90 > /dev/null
+ - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90 > /dev/null
+ - sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-4.9 90 > /dev/null
 
  # Install linuxbrew essentials
  - sudo apt-get install -qq build-essential curl git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
