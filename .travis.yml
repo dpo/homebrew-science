@@ -30,7 +30,7 @@ install:
  - cd $HOME
  - git clone https://github.com/Homebrew/linuxbrew.git
  #- if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
- - export LINUXBREW=$HOME/.linuxbrew
+ - export LINUXBREW=$HOME/linuxbrew
  - export PATH=$LINUXBREW/bin:$PATH
  - export LD_LIBRARY_PATH=$LINUXBREW/lib:$LD_LIBRARY_PATH
 
