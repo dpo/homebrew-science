@@ -35,7 +35,10 @@ install:
  - ln -s $(which g++) $LINUXBREW/bin/g++-${gccver}
  - ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran-${gccver}
  - ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran
- - ls -l $LINUXBREW/bin
+
+ # Trick Homebrew into believing that the gcc formula is installed.
+ - mkdir -p $LINUXBREW/Cellar/gcc/4.9.2_1
+ - echo "decoy" > $LINUXBREW/Cellar/gcc/4.9.2_1/somefile.txt
 
  # Taps used by formulas in Science
  - brew tap homebrew/python
