@@ -38,7 +38,7 @@ install:
  - gccver=$(gcc -dumpversion |cut -d. -f1,2)
  - ln -s $(which gcc) $LINUXBREW/bin/gcc-${gccver}
  - ln -s $(which g++) $LINUXBREW/bin/g++-${gccver}
- - ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran-${gcc-ver}
+ - ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran-${gccver}
  - ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran
  - ls -l $LINUXBREW/bin
 
@@ -56,7 +56,7 @@ install:
  - brew tap --repair
 
  # Incorrect file permissions: chmod 644
- - chmod 644 *.rb
+ - chmod 644 $TRAVIS_BUILD_DIR/*.rb
 
  # Install pkg-config [see: https://github.com/Homebrew/homebrew-science/pull/1664#issuecomment-69259072]
  - brew install pkg-config
