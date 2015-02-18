@@ -62,6 +62,7 @@ install:
  - brew install pkg-config
 
 script:
+ - cd $TRAVIS_BUILD_DIR
  - bash $TRAVIS_BUILD_DIR/travisCI/travis.sh
 
 notifications:

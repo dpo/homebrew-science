@@ -36,7 +36,7 @@ else
     echo "log: $(git log -1)"
     export changed_files=`git diff-tree --no-commit-id --name-only HEAD^ HEAD | grep .rb`
 fi
-echo $changed_files
+echo "to build: $changed_files"
 if [ -z "$changed_files" ]
 then
     echo "Nothing to test"
@@ -47,7 +47,8 @@ fi
 for file in $changed_files
 do
     # Dump output of building dependencies to log file
-    brew reinstall $(brew deps $file) >> $BUILD_OUTPUT 2>&1
+    #brew reinstall $(brew deps $file) >> $BUILD_OUTPUT 2>&1
+    brew install --only-dependencies $file >> $BUILD_OUTPUT 2>&1
     # Explicitly print the verbose output of test-bot
     brew test-bot $file -v
 done
