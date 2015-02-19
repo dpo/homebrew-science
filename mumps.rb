@@ -24,6 +24,8 @@ class Mumps < Formula
 
   depends_on :fortran
 
+  # trigger build
+
   resource "mumps_simple" do
     url "https://github.com/dpo/mumps_simple/archive/v0.2.tar.gz"
     sha1 "21106a5fc9e79fb8da8d9bc50ded354e38f5c500"
