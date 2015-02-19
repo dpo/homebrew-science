@@ -20,8 +20,8 @@ install:
 
  # Install BLAS, LAPACK
  - sudo apt-get install -qq libblas-dev liblapack-dev
- # Install openmpi
- #- sudo apt-get install -qq openmpi-bin
+ # Install openmpi if necessary
+ - [[ -z `which mpicc` ]] && sudo apt-get install -qq openmpi-bin
 
  - cd $HOME
  - git clone https://github.com/Homebrew/linuxbrew.git
@@ -35,12 +35,17 @@ install:
  - ln -s $(which g++) $LINUXBREW/bin/g++-${gccver}
  - ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran-${gccver}
  - ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran
+ - ln -s $(which mpicc) $LINUXBREW/bin/mpicc
+ - ln -s $(which mpic++) $LINUXBREW/bin/mpic++
+ - ln -s $(which mpicxx) $LINUXBREW/bin/mpicxx
+ - ln -s $(which mpif77) $LINUXBREW/bin/mpif77
+ - ln -s $(which mpif90) $LINUXBREW/bin/mpif90
 
  # Trick Homebrew into believing that the gcc formula is installed.
  - mkdir -p $LINUXBREW/Cellar/gcc/4.9.2_1
  - echo "decoy" > $LINUXBREW/Cellar/gcc/4.9.2_1/somefile.txt
- #- mkdir -p $LINUXBREW/Cellar/open-mpi/1.8.4
- #- echo "decoy" > $LINUXBREW/Cellar/open-mpi/1.8.4/somefile.txt
+ - mkdir -p $LINUXBREW/Cellar/open-mpi/1.8.4
+ - echo "decoy" > $LINUXBREW/Cellar/open-mpi/1.8.4/somefile.txt
  - unset HOMEBREW_VERBOSE
 
  # Taps used by formulas in Science
@@ -61,8 +66,8 @@ install:
  - cd $TRAVIS_BUILD_DIR
 
 script:
- #- bash $TRAVIS_BUILD_DIR/travisCI/travis.sh
- - bash $TRAVIS_BUILD_DIR/travisCI/travis_debug.sh
+ - bash $TRAVIS_BUILD_DIR/travisCI/travis.sh
+ #- bash $TRAVIS_BUILD_DIR/travisCI/travis_debug.sh
 
 notifications:
  email: false
