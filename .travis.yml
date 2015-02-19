@@ -39,6 +39,8 @@ install:
  # Trick Homebrew into believing that the gcc formula is installed.
  - mkdir -p $LINUXBREW/Cellar/gcc/4.9.2_1
  - echo "decoy" > $LINUXBREW/Cellar/gcc/4.9.2_1/somefile.txt
+ - mkdir -p $LINUXBREW/Cellar/open-mpi/1.8.4
+ - echo "decoy" > $LINUXBREW/Cellar/open-mpi/1.8.4/somefile.txt
  - unset HOMEBREW_VERBOSE
 
  # Taps used by formulas in Science
@@ -59,7 +61,7 @@ install:
  - cd $TRAVIS_BUILD_DIR
 
 script:
- - bash $TRAVIS_BUILD_DIR/travisCI/travis_debug.sh
+ - bash $TRAVIS_BUILD_DIR/travisCI/travis.sh
 
 notifications:
  email: false

@@ -49,7 +49,7 @@ do
     #brew reinstall $(brew deps $file) >> $BUILD_OUTPUT 2>&1
     brew install --only-dependencies $file >> $BUILD_OUTPUT 2>&1
     # Explicitly print the verbose output of test-bot
-    brew test-bot $file -v
+    brew test-bot $file --skip-setup
 done
 
 # The build was successful dump the output
