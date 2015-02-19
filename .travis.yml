@@ -22,6 +22,7 @@ install:
  - sudo apt-get install -qq libblas-dev liblapack-dev
  # Install openmpi if necessary
  - if [[ -z `which mpicc` ]]; then sudo apt-get install -qq openmpi-bin; fi
+ - export MPI_BASE_DIR=/usr
 
  - cd $HOME
  - git clone https://github.com/Homebrew/linuxbrew.git
