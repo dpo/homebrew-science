@@ -10,7 +10,7 @@ touch $BUILD_OUTPUT
 
 dump_output() {
    echo "############# Dependency build log(last 3Mb) start #############"
-   tail --bytes=512 $BUILD_OUTPUT
+   tail --bytes=3072 $BUILD_OUTPUT
    echo "############# Dependency build log end #############"
 }
 error_handler() {
@@ -49,7 +49,7 @@ do
     #brew reinstall $(brew deps $file) >> $BUILD_OUTPUT 2>&1
     brew install --only-dependencies $file >> $BUILD_OUTPUT 2>&1
     # Explicitly print the verbose output of test-bot
-    brew test-bot $file --skip-setup
+    brew test-bot $file --skip-setup >> $BUILD_OUTPUT 2>&1
 done
 
 # The build was successful dump the output
