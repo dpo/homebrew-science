@@ -21,7 +21,7 @@ install:
  # Install BLAS, LAPACK
  - sudo apt-get install -qq libblas-dev liblapack-dev
  # Install openmpi if necessary
- - [[ -z `which mpicc` ]] && sudo apt-get install -qq openmpi-bin
+ - if [[ -z `which mpicc` ]]; then sudo apt-get install -qq openmpi-bin; fi
 
  - cd $HOME
  - git clone https://github.com/Homebrew/linuxbrew.git
