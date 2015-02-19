@@ -10,7 +10,7 @@ touch $BUILD_OUTPUT
 
 dump_output() {
    echo "############# Dependency build log(last 3Mb) start #############"
-   tail --bytes=3072 $BUILD_OUTPUT
+   tail --bytes=512 $BUILD_OUTPUT
    echo "############# Dependency build log end #############"
 }
 error_handler() {
