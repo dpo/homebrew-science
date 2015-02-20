@@ -18,6 +18,8 @@ do
     brew install --only-dependencies $file
     # Use --skip-setup or else brew doctor fails b/c of our gcc trick.
     #brew test-bot $file --skip-setup
-    brew install -v $file
+    brew install -v $file --build-bottle
+    brew test -v $file
+    brew audit $file --strict
 done
 

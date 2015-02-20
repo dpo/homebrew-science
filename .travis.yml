@@ -68,8 +68,8 @@ install:
  - cd $TRAVIS_BUILD_DIR
 
 script:
- - bash $TRAVIS_BUILD_DIR/travisCI/travis.sh
- #- bash $TRAVIS_BUILD_DIR/travisCI/travis_debug.sh
+ #- bash $TRAVIS_BUILD_DIR/travisCI/travis.sh
+ - bash $TRAVIS_BUILD_DIR/travisCI/travis_debug.sh
 
 notifications:
  email: false
