@@ -65,7 +65,7 @@ install:
 
  # Install pkg-config [see: https://github.com/Homebrew/homebrew-science/pull/1664#issuecomment-69259072]
  - brew install pkg-config
- - brew install cmake --without-docs
+ - brew install -v cmake --without-docs
  - cd $TRAVIS_BUILD_DIR
 
 script:
