@@ -20,7 +20,6 @@ class Mlpack < Formula
 
   def install
     ENV.cxx11
-    # ENV.libcxx if MacOS.version < :mavericks
     dylib = OS.mac? ?  "dylib" : "so"
     cmake_args = std_cmake_args
     cmake_args << "-DDEBUG=" + ((build.with? "debug") ? "ON" : "OFF")
@@ -60,7 +59,7 @@ class Mlpack < Formula
         Log::Warn << "A false alarm!" << std::endl;
       }
       EOS
-    system ENV.cxx, "test.cpp",
+    system ENV.cxx, "-stdlib=libc++", "test.cpp",
            "-I#{include}", "-I#{Formula["libxml2"].opt_include}/libxml2",
            "-L#{lib}", "-lmlpack", "-o", "test"
     system "./test", "--verbose"
