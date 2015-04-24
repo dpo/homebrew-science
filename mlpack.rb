@@ -19,7 +19,7 @@ class Mlpack < Formula
   option "with-check", "Run build-time tests"
 
   def install
-    ENV.cxx11 if build.cxx11?
+    ENV.cxx11
     # ENV.libcxx if MacOS.version < :mavericks
     dylib = OS.mac? ?  "dylib" : "so"
     cmake_args = std_cmake_args
