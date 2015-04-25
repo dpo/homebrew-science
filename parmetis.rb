@@ -27,6 +27,8 @@ class Parmetis < Formula
 
     system "make", "config", "prefix=#{prefix}", "shared=1"
     system "make", "install"
+
+    libexec.install "libparmetis"
     share.install "Graphs" # Sample data for test
   end
 
