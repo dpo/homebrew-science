@@ -14,9 +14,6 @@ install:
  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90 > /dev/null
  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90 > /dev/null
  - sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-4.9 90 > /dev/null
- - wget http://www.cmake.org/files/v3.2/cmake-3.2.1-Linux-x86_64.tar.gz; tar -xzf cmake-3.2.1-Linux-x86_64.tar.gz; sudo cp -fR cmake-3.2.1-Linux-x86_64/* /usr; export PATH=`pwd`/cmake-3.2.1-Linux-x86_64/bin:$PATH;
- - which cmake
- - cmake --version
 
  # Install linuxbrew essentials
  - sudo apt-get install -qq build-essential curl git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
@@ -46,7 +43,6 @@ install:
  - ln -s $(which mpicxx) $LINUXBREW/bin/mpicxx
  - ln -s $(which mpif77) $LINUXBREW/bin/mpif77
  - ln -s $(which mpif90) $LINUXBREW/bin/mpif90
- - ln -s $(which cmake)  $LINUXBREW/bin/cmake
 
  # Trick Homebrew into believing that the gcc formula is installed.
  - mkdir -p $LINUXBREW/Cellar/gcc/4.9.2_1
