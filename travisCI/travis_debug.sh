@@ -11,7 +11,7 @@ else
     echo "log: $(git log -1)"
     export changed_files=`git diff-tree --no-commit-id --name-only HEAD^ HEAD | grep .rb`
 fi
-[[ -z "$changed_files" ]] && { echo "Nothing to test"; exit 0; }
+[[ -z "$changed_files" ]] && { echo "Nothing to test"; }
 
 for file in $changed_files
 do
@@ -20,6 +20,6 @@ do
     #brew test-bot $file --skip-setup
     brew install -v $file --build-bottle
     brew test -v $file
-    brew audit $file --strict
+    brew audit $file #--strict
 done
 

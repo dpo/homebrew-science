@@ -52,10 +52,10 @@ install:
  - unset HOMEBREW_VERBOSE
 
  # Taps used by formulas in Science
- - brew tap homebrew/python
- - brew tap homebrew/versions
- - brew tap homebrew/dupes
- - brew tap homebrew/x11
+ # - brew tap homebrew/python
+ # - brew tap homebrew/versions
+ # - brew tap homebrew/dupes
+ # - brew tap homebrew/x11
 
  - ln -s $TRAVIS_BUILD_DIR $LINUXBREW/Library/Taps/homebrew/homebrew-science
  - brew tap --repair
