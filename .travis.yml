@@ -57,6 +57,7 @@ install:
  # - brew tap homebrew/dupes
  # - brew tap homebrew/x11
 
+ - mkdir -p $LINUXBREW/Library/Taps/homebrew
  - ln -s $TRAVIS_BUILD_DIR $LINUXBREW/Library/Taps/homebrew/homebrew-science
  - brew tap --repair
 
