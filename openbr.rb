@@ -1,10 +1,10 @@
-require "formula"
-
 class Openbr < Formula
+  desc "Open Source Biometrics, Face Recognition"
   homepage "http://www.openbiometrics.org/"
-  url "https://github.com/biometrics/openbr/releases/download/v0.4.1/openbr0.4.1_withModels.tar.gz"
-  version "0.4.1"
-  sha1 "1cf3b9b6fad1c717d8b0256b3a22d138510572e9"
+  url "https://github.com/biometrics/openbr.git"
+  version "0.5.0"
+
+  option "with-check", "Run build-time tests (time consuming)"
 
   depends_on "cmake" => :build
   depends_on "qt5"
@@ -12,8 +12,21 @@ class Openbr < Formula
   depends_on "eigen"
 
   def install
-    system "cmake", ".", *std_cmake_args
-    system "make", "install"
+    mkdir "build" do
+      system "cmake", "..", "-DCMAKE_BUILD_TYPE=Release", *std_cmake_args
+      system "make"
+    end
+
+    if build.with? "check"
+      cd "scripts" do
+        system "./downloadDatasets.sh"
+      end
+      system "make", "test"
+    end
+
+    cd "build" do
+      system "make", "install"
+    end
   end
 
   test do
