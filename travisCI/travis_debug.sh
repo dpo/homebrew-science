@@ -17,9 +17,9 @@ for file in $changed_files
 do
     brew install --only-dependencies $file
     # Use --skip-setup or else brew doctor fails b/c of our gcc trick.
-    #brew test-bot $file --skip-setup
-    brew install -v $file --build-bottle
-    brew test -v $file
-    brew audit $file #--strict
+    brew test-bot $file --skip-setup --keep-logs
+    # brew install -v $file --build-bottle
+    # brew test -v $file
+    # brew audit $file #--strict
 done
 
