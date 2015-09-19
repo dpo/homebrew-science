@@ -4,8 +4,8 @@ install:
   - unset DYLD_LIBRARY_PATH
   - brew update
   # Install homebrew-science as tap.
-  - mkdir -p $(brew --repo)/Library/Taps/travis
-  - ln -s $PWD $(brew --repo)/Library/Taps/travis/travis-testtap
+  - mkdir -p $(brew --repo)/Library/Taps/homebrew
+  - ln -s $TRAVIS_BUILD_DIR $(brew --repo)/Library/Taps/homebrew/homebrew-science
   - brew tap --repair
 
 script:
