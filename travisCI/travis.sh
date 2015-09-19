@@ -13,11 +13,17 @@ else
 fi
 
 echo "Formulae to build: $changed_files"
+
+bot_options='--skip-setup --skip-homebrew --keep-logs'
 for file in $changed_files
 do
-  brew test-bot $file --skip-setup --keep-logs
+  # Test new formula
+  brew test-bot $file $bot_options
+
+  # Check breakage of any dependent
   for item in $(brew uses $file) 
   do
-    brew test-bot $item --skip-setup --keep-logs
+    brew install $(brew deps $item)
+    brew install $item --build-from-source
   done
 done
