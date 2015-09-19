@@ -1,5 +1,5 @@
 #!/bin/bash
-set -evx
+set -e
 
 if [ "$TRAVIS_PULL_REQUEST" ==  "false" ]
 then
