@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ev
+set -e
 
 this_tap=science
 
@@ -18,10 +18,8 @@ echo "Formulae to build: $changed_files"
 for file in $changed_files
 do
   formula=$(basename $file .rb)
-
-  # brew test-bot $file '--skip-setup --skip-homebrew --keep-logs'  # BrewTestBot already does this.
   brew install $formula --only-dependencies  # Use bottles for dependencies.
-  brew install $formula
+  brew install $formula --build-from-source
   brew test $formula
 
   # Check breakage of any dependent. Only consider formulae in this tap.
