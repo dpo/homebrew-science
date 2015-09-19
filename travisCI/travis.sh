@@ -17,14 +17,17 @@ echo "Formulae to build: $changed_files"
 bot_options='--skip-setup --skip-homebrew --keep-logs'
 for file in $changed_files
 do
-  # Test new formula.
-  # The BrewTestBot already does this.
-  brew test-bot $file $bot_options
+
+  # brew test-bot $file $bot_options  # The BrewTestBot already does this.
+  brew install $item --only-dependencies  # Use bottles for dependencies.
+  brew install $file
+  brew test $file
 
   # Check breakage of any dependent.
   for item in $(brew uses $file) 
   do
     brew install $item --only-dependencies  # Use bottles for dependencies.
     brew install $item --build-from-source
+    brew test $item
   done
 done
