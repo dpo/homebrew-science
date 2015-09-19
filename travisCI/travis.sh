@@ -18,16 +18,19 @@ bot_options='--skip-setup --skip-homebrew --keep-logs'
 for file in $changed_files
 do
 
+  formula=$(basename $file .rb)
+
   # brew test-bot $file $bot_options  # The BrewTestBot already does this.
-  brew install $item --only-dependencies  # Use bottles for dependencies.
-  brew install $file
-  brew test $file
+  brew install $formula --only-dependencies  # Use bottles for dependencies.
+  brew install $formula
+  brew test $formula
 
   # Check breakage of any dependent.
-  for item in $(brew uses $file) 
+  for item in $(brew uses $formula) 
   do
-    brew install $item --only-dependencies  # Use bottles for dependencies.
-    brew install $item --build-from-source
-    brew test $item
+    dependent=$(basename $item .rb)
+    brew install $dependent --only-dependencies  # Use bottles for dependencies.
+    brew install $dependent --build-from-source
+    brew test $dependent
   done
 done
