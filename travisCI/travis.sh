@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ev
 
+this_tap=science
+
 if [ "$TRAVIS_PULL_REQUEST" ==  "false" ]
 then
   export changed_files=$(git diff-tree --no-commit-id --name-only -r $TRAVIS_COMMIT | grep .rb)
@@ -13,20 +15,19 @@ else
 fi
 
 echo "Formulae to build: $changed_files"
-
-bot_options='--skip-setup --skip-homebrew --keep-logs'
 for file in $changed_files
 do
-
   formula=$(basename $file .rb)
 
-  # brew test-bot $file $bot_options  # The BrewTestBot already does this.
+  # brew test-bot $file '--skip-setup --skip-homebrew --keep-logs'  # BrewTestBot already does this.
   brew install $formula --only-dependencies  # Use bottles for dependencies.
   brew install $formula
   brew test $formula
 
-  # Check breakage of any dependent.
-  for item in $(brew uses $formula) 
+  # Check breakage of any dependent. Only consider formulae in this tap.
+  dependents=$(brew uses $formula | grep $this_tap) 
+  echo "Dependents: $dependents"
+  for item in $dependents
   do
     dependent=$(basename $item .rb)
     brew install $dependent --only-dependencies  # Use bottles for dependencies.
