@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ev
 
 if [ "$TRAVIS_PULL_REQUEST" ==  "false" ]
 then
@@ -17,13 +17,14 @@ echo "Formulae to build: $changed_files"
 bot_options='--skip-setup --skip-homebrew --keep-logs'
 for file in $changed_files
 do
-  # Test new formula
+  # Test new formula.
+  # The BrewTestBot already does this.
   brew test-bot $file $bot_options
 
-  # Check breakage of any dependent
+  # Check breakage of any dependent.
   for item in $(brew uses $file) 
   do
-    brew install $(brew deps $item)
+    brew install $item --only-dependencies  # Use bottles for dependencies.
     brew install $item --build-from-source
   done
 done
