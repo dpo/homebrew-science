@@ -15,6 +15,7 @@ class Blasr < Formula
   end
 
   depends_on "hdf5"
+  depends_on :mpi => [:cc, :cxx] if Tab.for_formula(Formula["hdf5"]).with? "mpi"
 
   # https://github.com/PacificBiosciences/blasr/issues/28
   fails_with :clang do
@@ -37,9 +38,14 @@ class Blasr < Formula
 
   def install
     hdf5 = Formula["hdf5"]
-    system "make", "STATIC=",
-      "HDF5INCLUDEDIR=#{hdf5.opt_include}",
-      "HDF5LIBDIR=#{hdf5.opt_lib}"
+    args = ["STATIC=",
+            "HDF5INCLUDEDIR=#{hdf5.opt_include}",
+            "HDF5LIBDIR=#{hdf5.opt_lib}",
+           ]
+    args += ["CC=#{ENV["MPICC"]}",
+             "CXX=#{ENV["MPICXX"]}",
+            ] if Tab.for_formula(hdf5).with? "mpi"
+    system "make", *args
 
     # Fix the error: install: mkdir /usr/local/Cellar/blasr/2.2/bin: exists
     ENV.deparallelize
