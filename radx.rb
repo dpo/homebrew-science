@@ -5,6 +5,7 @@ class Radx < Formula
   mirror "ftp://ftp.rap.ucar.edu/pub/titan/radx/previous_releases/radx-20150826.src.tgz"
   version "20150826"
   sha256 "d379b956bf19ff903dcfa6a5ca134d5241be3085e6d97acca70dd7ec42da8ce3"
+  revision 1
 
   bottle do
     cellar :any
