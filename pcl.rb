@@ -58,6 +58,9 @@ class Pcl < Formula
 
     depends_on "glew"
     depends_on CudaRequirement => :optional
+
+    # CUDA 6.5 works with libc++
+    patch :DATA
   end
 
   option "with-examples", "Build pcl examples."
@@ -75,13 +78,14 @@ class Pcl < Formula
   depends_on "qhull"
   depends_on "libusb"
   depends_on "qt" => :recommended
-  if build.with? "qt"
+  depends_on "qt5" => :optional
+  vtk_opts = [:recommended]
+  if (build.with? "qt") || (build.with? "qt5")
     depends_on "sip" # Fix for building system
     depends_on "pyqt" # Fix for building system
-    depends_on "vtk" => [:recommended, "with-qt"]
-  else
-    depends_on "vtk" => :recommended
+    vtk_opts << ((build.with? "qt5") ? "with-qt5" : "with-qt")
   end
+  depends_on "vtk" => vtk_opts
   depends_on "openni" => :optional
   depends_on "openni2" => :optional
 
@@ -94,17 +98,10 @@ class Pcl < Formula
       -DBUILD_global_tests:BOOL=OFF
       -DWITH_TUTORIALS:BOOL=OFF
       -DWITH_DOCS:BOOL=OFF
-      -DPCL_QT_VERSION=4
     ]
 
     if build.head? && (build.with? "cuda")
-      args += %W[
-        -DWITH_CUDA:BOOL=AUTO_OFF
-        -DBUILD_GPU:BOOL=ON
-        -DBUILD_gpu_people:BOOL=ON
-        -DBUILD_gpu_surface:BOOL=ON
-        -DBUILD_gpu_tracking:BOOL=ON
-      ]
+      args << "-DWITH_CUDA:BOOL=AUTO_OFF"
     else
       args << "-DWITH_CUDA:BOOL=OFF"
     end
@@ -116,15 +113,20 @@ class Pcl < Formula
     end
 
     if build.with? "apps"
-      args += %W[
-        -DBUILD_apps=AUTO_OFF
-        -DBUILD_apps_3d_rec_framework=AUTO_OFF
-        -DBUILD_apps_cloud_composer=AUTO_OFF
-        -DBUILD_apps_in_hand_scanner=AUTO_OFF
-        -DBUILD_apps_modeler=AUTO_OFF
-        -DBUILD_apps_optronic_viewer=AUTO_OFF
-        -DBUILD_apps_point_cloud_editor=AUTO_OFF
-      ]
+      if build.with?("qt") || build.with?("qt5")
+        args += %W[
+          -DBUILD_apps=AUTO_OFF
+          -DBUILD_apps_3d_rec_framework=AUTO_OFF
+          -DBUILD_apps_cloud_composer=AUTO_OFF
+          -DBUILD_apps_in_hand_scanner=AUTO_OFF
+          -DBUILD_apps_modeler=AUTO_OFF
+          -DBUILD_apps_optronic_viewer=AUTO_OFF
+          -DBUILD_apps_point_cloud_editor=AUTO_OFF
+        ]
+      else
+        opoo "Attempting to build apps but QT has been explicitly disabled. Disabling apps."
+        args << "-DBUILD_apps:BOOL=OFF"
+      end
     else
       args << "-DBUILD_apps:BOOL=OFF"
     end
@@ -143,7 +145,14 @@ class Pcl < Formula
       args << "-DCMAKE_DISABLE_FIND_PACKAGE_OpenNI:BOOL=TRUE"
     end
 
-    args << "-DWITH_QT:BOOL=FALSE" if build.without? "qt"
+    if build.with? "qt5"
+      args << "-DPCL_QT_VERSION:STRING=5"
+    elsif build.with? "qt"
+      args << "-DPCL_QT_VERSION:STRING=4"
+    else
+      args << "-DWITH_QT:BOOL=FALSE"
+    end
+
     args << "-DCMAKE_DISABLE_FIND_PACKAGE_VTK:BOOL=TRUE" if build.without? "vtk"
 
     args << ".."
@@ -156,3 +165,36 @@ class Pcl < Formula
     end
   end
 end
+__END__
+diff --git a/cmake/pcl_find_cuda.cmake b/cmake/pcl_find_cuda.cmake
+index 2f0425e..0675a55 100644
+--- a/cmake/pcl_find_cuda.cmake
++++ b/cmake/pcl_find_cuda.cmake
+@@ -1,16 +1,6 @@
+ # Find CUDA
+
+
+-# Recent versions of cmake set CUDA_HOST_COMPILER to CMAKE_C_COMPILER which
+-# on OSX defaults to clang (/usr/bin/cc), but this is not a supported cuda
+-# compiler.  So, here we will preemptively set CUDA_HOST_COMPILER to gcc if
+-# that compiler exists in /usr/bin.  This will not override an existing cache
+-# value if the user has passed CUDA_HOST_COMPILER on the command line.
+-if (NOT DEFINED CUDA_HOST_COMPILER AND CMAKE_C_COMPILER_ID STREQUAL "Clang" AND EXISTS /usr/bin/gcc)
+-  set(CUDA_HOST_COMPILER /usr/bin/gcc CACHE FILEPATH "Host side compiler used by NVCC")
+-  message(STATUS "Setting CMAKE_HOST_COMPILER to /usr/bin/gcc instead of ${CMAKE_C_COMPILER}.  See http://dev.pointclouds.org/issues/979")
+-endif()
+-
+ if(MSVC11)
+ 	# Setting this to true brakes Visual Studio builds.
+ 	set(CUDA_ATTACH_VS_BUILD_RULE_TO_CUDA_FILE OFF CACHE BOOL "CUDA_ATTACH_VS_BUILD_RULE_TO_CUDA_FILE")
+@@ -47,10 +37,5 @@ if(CUDA_FOUND)
+ 	include(${PCL_SOURCE_DIR}/cmake/CudaComputeTargetFlags.cmake)
+ 	APPEND_TARGET_ARCH_FLAGS()
+
+-  # Send a warning if CUDA_HOST_COMPILER is set to a compiler that is known
+-  # to be unsupported.
+-  if (CUDA_HOST_COMPILER STREQUAL CMAKE_C_COMPILER AND CMAKE_C_COMPILER_ID STREQUAL "Clang")
+-    message(WARNING "CUDA_HOST_COMPILER is set to an unsupported compiler: ${CMAKE_C_COMPILER}.  See http://dev.pointclouds.org/issues/979")
+-  endif()
+
+ endif()
