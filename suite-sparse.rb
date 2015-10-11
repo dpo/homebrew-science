@@ -3,7 +3,7 @@ class SuiteSparse < Formula
   homepage "http://faculty.cse.tamu.edu/davis/suitesparse.html"
   url "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-4.4.4.tar.gz"
   sha256 "f2ae47e96f3f37b313c3dfafca59f13e6dbc1e9e54b35af591551919810fb6fd"
-  revision 1
+  revision 2
 
   bottle do
     cellar :any
