@@ -24,23 +24,32 @@ class Metis4 < Formula
       all_load = "-Wl,-whole-archive"
       noall_load = "-Wl,-no-whole-archive"
     end
-    system "make", "CC=#{ENV.cc}", "COPTIONS=-fPIC"
+    cd "Lib" do
+      system "make", "CC=#{ENV.cc}", "COPTIONS=-fPIC"
+    end
+    cd "Programs" do
+      system "make", "CC=#{ENV.cc}", "COPTIONS=-fPIC"
+    end
     system ENV.cc, "-fPIC", "-shared", "#{all_load}", "libmetis.a", "#{noall_load}", "-o", "libmetis.#{so}"
     bin.install %w[pmetis kmetis oemetis onmetis partnmesh partdmesh mesh2nodal mesh2dual graphchk]
     lib.install "libmetis.#{so}"
     include.install Dir["Lib/*.h"]
-    (share / "metis4").install %w[Graphs/mtest Graphs/4elt.graph Graphs/metis.mesh Graphs/test.mgraph]
+    pkgshare.install %w[Programs/io.c Test/mtest.c Graphs/4elt.graph Graphs/metis.mesh Graphs/test.mgraph]
   end
 
   test do
-    system "#{share}/metis4/mtest", "#{share}/metis4/4elt.graph"
-    system "#{bin}/kmetis", "#{share}/metis4/4elt.graph", "40"
-    system "#{bin}/onmetis", "#{share}/metis4/4elt.graph"
-    system "#{bin}/pmetis", "#{share}/metis4/test.mgraph", "2"
-    system "#{bin}/kmetis", "#{share}/metis4/test.mgraph", "2"
-    system "#{bin}/kmetis", "#{share}/metis4/test.mgraph", "5"
-    system "#{bin}/partnmesh", "#{share}/metis4/metis.mesh", "10"
-    system "#{bin}/partdmesh", "#{share}/metis4/metis.mesh", "10"
-    system "#{bin}/mesh2dual", "#{share}/metis4/metis.mesh"
+    cp pkgshare/"io.c", testpath
+    cp pkgshare/"mtest.c", testpath
+    system ENV.cc, "-I#{include}", "-c", "io.c"
+    system ENV.cc, "-I#{include}", "-L#{lib}", "-lmetis", "mtest.c", "io.o", "-o", "mtest"
+    system "./mtest", "#{pkgshare}/4elt.graph"
+    system "#{bin}/kmetis", "#{pkgshare}/4elt.graph", "40"
+    system "#{bin}/onmetis", "#{pkgshare}/4elt.graph"
+    system "#{bin}/pmetis", "#{pkgshare}/test.mgraph", "2"
+    system "#{bin}/kmetis", "#{pkgshare}/test.mgraph", "2"
+    system "#{bin}/kmetis", "#{pkgshare}/test.mgraph", "5"
+    system "#{bin}/partnmesh", "#{pkgshare}/metis.mesh", "10"
+    system "#{bin}/partdmesh", "#{pkgshare}/metis.mesh", "10"
+    system "#{bin}/mesh2dual", "#{pkgshare}/metis.mesh"
   end
 end
