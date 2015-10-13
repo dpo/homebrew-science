@@ -15,14 +15,15 @@ class Metis4 < Formula
   def install
     if OS.mac?
       so = "dylib"
-      ar = "libtool -dynamic -install_name #{lib}/$(notdir $@) -undefined dynamic_lookup -o"
+      all_load = "-Wl,-all_load"
+      noall_load = ""
     else
       so = "so"
-      ar = "$(CC) -shared -Wl,-soname -Wl,#{lib}/$(notdir $@) -o"
+      all_load = "-Wl,-whole-archive"
+      noall_load = "-Wl,-no-whole-archive"
     end
-    inreplace "Lib/Makefile", "libmetis.a", "libmetis.#{so}"
-    make_args = ["COPTIONS=-fPIC", "AR=#{ar}", "RANLIB=echo", "METISLIB=../libmetis.#{so}"]
-    system "make", *make_args
+    system "make", "CC=#{ENV.cc}", "COPTIONS=-fPIC"
+    system ENV.cc, "-fPIC", "-shared", "#{all_load}", "libmetis.a", "#{noall_load}", "-o", "libmetis.#{so}"
     bin.install %w[pmetis kmetis oemetis onmetis partnmesh partdmesh mesh2nodal mesh2dual graphchk]
     lib.install "libmetis.#{so}"
     include.install Dir["Lib/*.h"]
