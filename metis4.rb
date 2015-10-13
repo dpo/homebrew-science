@@ -1,7 +1,9 @@
 class Metis4 < Formula
+  desc "Serial graph partitioning and fill-reducing ordering"
   url "http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/OLD/metis-4.0.3.tar.gz"
   homepage "http://glaros.dtc.umn.edu/gkhome/views/metis"
-  sha1 "63303786414a857eaeea2b2a006521401bccda5e"
+  sha256 "5efa35de80703c1b2c4d0de080fafbcf4e0d363a21149a1ad2f96e0144841a55"
+  revision 1
 
   bottle do
     cellar :any
