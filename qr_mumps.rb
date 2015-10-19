@@ -19,8 +19,8 @@ class QrMumps < Formula
 
   depends_on "metis4" => :recommended
   depends_on "scotch5" => :optional
-  depends_on "openblas" => :optional
-  depends_on "veclibfort" if build.without? "openblas"
+  depends_on "openblas" => ((OS.mac?) ? :optional : :recommended)
+  depends_on "veclibfort" if build.without?("openblas") && OS.mac?
 
   needs :openmp
 
