@@ -41,6 +41,10 @@ class Atlas < Formula
         system "make", "time"
       end
       system "make", "install"
+      cd "lib" do
+        system "make", "shared"
+        system "make", "ptshared"
+      end unless OS.mac? # currently broken on OSX
     end
   end
 
