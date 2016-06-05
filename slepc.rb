@@ -1,9 +1,8 @@
 class Slepc < Formula
   desc "Scalable Library for Eigenvalue Computations"
   homepage "http://www.grycap.upv.es/slepc"
-  url "http://slepc.upv.es/download/download.php?filename=slepc-3.6.2.tar.gz"
-  sha256 "2ab4311bed26ccf7771818665991b2ea3a9b15f97e29fd13911ab1293e8e65df"
-  revision 1
+  url "http://slepc.upv.es/download/download.php?filename=slepc-3.7.1.tar.gz"
+  sha256 "670216f263e3074b21e0623c01bc0f562fdc0bffcd7bd42dd5d8edbe73a532c2"
 
   bottle do
     sha256 "5bbfd1cd8a413034fe886dfed19dce44256901a04b0dbd3b47db41ecd48cad1f" => :el_capitan
@@ -77,9 +76,6 @@ class Slepc < Formula
 
     # install some tutorials for use in test block
     pkgshare.install "src/eps/examples/tutorials"
-
-    # fix install name on OS-X
-    system "install_name_tool", "-id", "#{opt_prefix}/lib/libslepc.3.6.dylib", "#{prefix}/#{petsc_arch}/lib/libslepc.3.6.2.dylib" if OS.mac?
   end
 
   def caveats; <<-EOS.undent
@@ -93,7 +89,9 @@ class Slepc < Formula
     Dir.chdir("tutorials") do
       system "mpicc", "ex1.c", "-I#{opt_include}", "-I#{Formula["petsc"].opt_include}", "-L#{Formula["petsc"].opt_lib}", "-lpetsc", "-L#{opt_lib}", "-lslepc", "-o", "ex1"
       system "mpirun -np 3 ex1 2>&1 | tee ex1.out"
-      assert (identical?("output/ex1_1.out", "ex1.out"))
+      `cat ex1.out | tail -3 | awk '{print $NF}'`.split.each do |val|
+        assert val.to_f < 1.0e-8
+      end
     end
   end
 end
