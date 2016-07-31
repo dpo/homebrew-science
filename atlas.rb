@@ -1,8 +1,8 @@
 class Atlas < Formula
   desc "Automatically Tuned Linear Algebra Software"
   homepage "http://math-atlas.sourceforge.net"
-  url "https://sourceforge.net/projects/math-atlas/files/Stable/3.10.2/atlas3.10.2.tar.bz2"
-  sha256 "3aab139b118bf3fcdb4956fbd71676158d713ab0d3bccb2ae1dc3769db22102f"
+  url "https://sourceforge.net/projects/math-atlas/files/Stable/3.10.3/atlas3.10.3.tar.bz2"
+  sha256 "2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7"
 
   devel do
     url "https://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.38/atlas3.11.38.tar.bz2"
