@@ -12,62 +12,82 @@ class Arpack < Formula
     sha256 "37882bb51410da6602c2660f894de3adcbf7b1c24d82b73c25aafe9a9776fbbd" => :yosemite
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "libtool" => :build
+  depends_on "cmake" => :build
 
   depends_on :fortran
   depends_on :mpi => [:optional, :f77]
   depends_on "openblas" => OS.mac? ? :optional : :recommended
   depends_on "veclibfort" if build.without?("openblas") && OS.mac?
 
+  # to be removed at next update
+  patch :DATA
+
   def install
     ENV.m64 if MacOS.prefer_64_bit?
+    so = OS.mac? ? "dylib" : "so"
 
-    args = []
-
+    cmake_args = %w[-DEXAMPLES=ON -DBUILD_SHARED_LIBS=ON]
     if build.with? "mpi"
-      args << "F77=#{ENV["MPIF77"]}"
-      args << "--enable-mpi"
+      cmake_args << "-DMPI=ON"
+      cmake_args << "-DCMAKE_Fortran_COMPILER=#{ENV["MPIF77"]}"
     end
-
-    blas_val = if build.with? "openblas"
-      "-L#{Formula["openblas"].opt_lib} -lopenblas"
+    if build.with? "openblas"
+      cmake_args << "-DBLAS_openblas_LIBRARY=#{Formula["openblas"].opt_lib}/libopenblas.#{so}"
+      cmake_args << "-DLAPACK_openblas_LIBRARY=#{Formula["openblas"].opt_lib}/libopenblas.#{so}"
     elsif OS.mac?
-      "-L#{Formula["veclibfort"].opt_lib} -lvecLibFort"
-    else
-      "--with-blas=-lblas -llapack"
+      cmake_args << "-DBLAS_Accelerate_LIBRARY=#{Formula["veclibfort"].opt_lib}/libvecLibFort.#{so}"
+      cmake_args << "-DLAPACK_Accelerate_LIBRARY=#{Formula["veclibfort"].opt_lib}/libvecLibFort.#{so}"
     end
 
-    args += %W[
-      --disable-dependency-tracking
-      --prefix=#{libexec}
-      --with-blas=#{blas_val}
-    ]
-
-    system "./bootstrap"
-    system "./configure", *args
-    system "make"
-    system "make", "check"
-    system "make", "install"
-
-    lib.install_symlink Dir["#{libexec}/lib/*"].select { |f| File.file?(f) }
-    (lib/"pkgconfig").install_symlink Dir["#{libexec}/lib/pkgconfig/*"]
-    (libexec/"share").install "TESTS/testA.mtx"
-    if build.with? "mpi"
-      (libexec/"bin").install (buildpath/"PARPACK/EXAMPLES/MPI").children
+    mkdir "build" do
+      system "cmake", "..", *(cmake_args + std_cmake_args)
+      system "make"
+      system "make", "check"
+      system "make", "install"
+      pkgshare.install "EXAMPLES"
     end
   end
 
   test do
     if build.with? "mpi"
-      cp_r (libexec/"bin").children, testpath
-      %w[pcndrv1 pdndrv1 pdndrv3 pdsdrv1
-         psndrv1 psndrv3 pssdrv1 pzndrv1].each do |slv|
+      (pkgshare/"EXAMPLES/parpack").children.each do |slv|
         system "mpirun", "-np", "4", slv
       end
     else
-      true
+      (pkgshare/"EXAMPLES/simple").children.each do |slv|
+        system slv
+      end
     end
   end
 end
+
+__END__
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 607d221..64ad291 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -118,6 +118,7 @@ if (MPI)
+                         ${parpackutil_STAT_SRCS})
+ 
+     target_link_libraries(parpack ${MPI_Fortran_LIBRARIES})
++    target_link_libraries(parpack arpack)
+     set_target_properties(parpack PROPERTIES OUTPUT_NAME parpack${LIBSUFFIX})
+ endif ()
+ 
+@@ -389,3 +390,15 @@ target_link_libraries(bug_1323 arpack ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
+ add_test(bug_1323 Tests/bug_1323)
+ 
+ add_dependencies(check dnsimp_test bug_1315_single bug_1315_double bug_1323)
++
++install(TARGETS arpack
++  ARCHIVE  DESTINATION lib
++  LIBRARY  DESTINATION lib
++  RUNTIME  DESTINATION bin)
++
++if (MPI)
++  install(TARGETS parpack
++    ARCHIVE  DESTINATION lib
++    LIBRARY  DESTINATION lib
++    RUNTIME  DESTINATION bin)
++endif()
+
