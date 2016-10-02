@@ -19,6 +19,7 @@ class Scotch < Formula
   depends_on "xz" => :optional # Provides lzma compression.
 
   def install
+    ENV.deparallelize if MacOS.version >= :sierra
     cd "src" do
       ln_s "Make.inc/Makefile.inc.i686_mac_darwin10", "Makefile.inc"
       # default CFLAGS: -O3 -Drestrict=__restrict -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_PTHREAD -DCOMMON_PTHREAD_BARRIER -DCOMMON_RANDOM_FIXED_SEED -DCOMMON_TIMING_OLD -DSCOTCH_PTHREAD -DSCOTCH_RENAME
