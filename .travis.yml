@@ -48,6 +48,7 @@ before_install:
   - ln -s "$TRAVIS_BUILD_DIR" "$(brew --repo)/Library/Taps/homebrew/homebrew-science";
   - cd "$(brew --repo)/Library/Taps/homebrew/homebrew-science";
   - for tap in homebrew/python homebrew/x11 homebrew/dupes homebrew/versions; do brew tap $tap; done;
+  - chmod 0644 $(brew --repo)/Library/Taps/homebrew/homebrew-science/*.rb;
   - export TRAVIS_BUILD_DIR="$(brew --repo)/Library/Taps/homebrew/homebrew-science";
   - env | grep TRAVIS | tee /tmp/travis.env
 
