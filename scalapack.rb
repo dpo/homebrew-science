@@ -3,7 +3,7 @@ class Scalapack < Formula
   homepage "http://www.netlib.org/scalapack/"
   url "http://www.netlib.org/scalapack/scalapack-2.0.2.tgz"
   sha256 "0c74aeae690fe5ee4db7926f49c5d0bb69ce09eea75beb915e00bba07530395c"
-  revision 7
+  revision 8
 
   head "https://icl.cs.utk.edu/svn/scalapack-dev/scalapack/trunk", :using => :svn
 
@@ -19,8 +19,12 @@ class Scalapack < Formula
 
   depends_on :mpi => [:cc, :f90]
   depends_on "cmake" => :build
-  depends_on "openblas" => :optional
-  depends_on "veclibfort" if build.without?("openblas") && OS.mac?
+  if OS.mac?
+    depends_on "openblas" => :optional
+    depends_on "veclibfort" if build.without?("openblas")
+  else
+    depends_on "openblas"
+  end
   depends_on :fortran
 
   def install
