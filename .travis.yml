@@ -8,16 +8,16 @@ matrix:
     - os: linux
       rvm: system
       sudo: required
-      dist: trusty  # for gfortran-6
+      dist: trusty
 
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-6
-      - g++-6
-      - gfortran-6
+      - gcc-5
+      - g++-5
+      - gfortran-5
   apt_packages:
     - build-essential
     - python-setuptools
