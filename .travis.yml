@@ -35,11 +35,7 @@ before_install:
       LINUXBREW=/home/linuxbrew/.linuxbrew;
       git clone https://github.com/Linuxbrew/brew.git $LINUXBREW;
       export PATH="$LINUXBREW/bin:$PATH";
-      gccver=$(gcc -dumpversion |cut -d. -f1,2);
-      ln -s $(which gcc) $LINUXBREW/bin/gcc-${gccver};
-      ln -s $(which g++) $LINUXBREW/bin/g++-$(g++ -dumpversion |cut -d. -f1,2);
-      ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran-${gccver};
-      ln -s $(which gfortran-${gccver}) $LINUXBREW/bin/gfortran;
+      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5 --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-5;
     fi
   - git -C "$(brew --repo)" reset --hard origin/master;
   - git -C "$(brew --repo)" clean -qxdff;
