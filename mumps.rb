@@ -4,7 +4,7 @@ class Mumps < Formula
   url "http://mumps.enseeiht.fr/MUMPS_5.0.1.tar.gz"
   mirror "http://graal.ens-lyon.fr/MUMPS/MUMPS_5.0.1.tar.gz"
   sha256 "50355b2e67873e2239b4998a46f2bbf83f70cdad6517730ab287ae3aae9340a0"
-  revision 4
+  revision 5
 
   bottle do
     cellar :any
@@ -14,6 +14,8 @@ class Mumps < Formula
   end
 
   depends_on :mpi => [:cc, :cxx, :f90, :recommended]
+  depends_on "openblas" => (OS.mac? ? :optional : :recommended)
+  depends_on "veclibfort" if build.without?("openblas") && OS.mac?
   if build.with? "mpi"
     depends_on "scalapack" => (build.with? "openblas") ? ["with-openblas"] : []
   end
@@ -21,9 +23,6 @@ class Mumps < Formula
   depends_on "parmetis" => :optional if build.with? "mpi"
   depends_on "scotch5"  => :optional
   depends_on "scotch"   => :optional
-
-  depends_on "openblas" => :optional
-  depends_on "veclibfort" if build.without?("openblas") && OS.mac?
 
   depends_on :fortran
 
@@ -185,6 +184,7 @@ class Mumps < Formula
     ENV.fortran
     cp_r pkgshare/"examples", testpath
     opts = ["-I#{opt_include}", "-L#{opt_lib}", "-lmumps_common"]
+    ohai Tab.for_name("mumps").with? "openblas"
     if Tab.for_name("mumps").with? "openblas"
       opts << "-L#{Formula["openblas"].opt_lib}" << "-lopenblas"
     elsif OS.mac?
