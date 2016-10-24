@@ -33,7 +33,6 @@ before_install:
   - chmod 0644 $(brew --repo)/Library/Taps/homebrew/homebrew-science/*.rb;
   - export TRAVIS_BUILD_DIR="$(brew --repo)/Library/Taps/homebrew/homebrew-science";
   - env | grep TRAVIS | tee /tmp/travis.env
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then brew install gcc; fi
 
 install:
   - export HOMEBREW_DEVELOPER="1"
