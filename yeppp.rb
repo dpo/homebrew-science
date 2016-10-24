@@ -2,7 +2,7 @@ class Yeppp < Formula
   homepage "http://www.yeppp.info"
   url "https://bitbucket.org/MDukhan/yeppp/downloads/yeppp-1.0.0.tar.bz2"
   sha256 "042ea66e729969d0e9a532d99c62739f1cdf7bcfbead9cfd2ef2eedd038d4c3d"
-  revision 1
+  revision 2
 
   bottle do
     cellar :any
