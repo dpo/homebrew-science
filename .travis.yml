@@ -12,14 +12,9 @@ matrix:
 
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-5
-      - g++-5
-      - gfortran-5
   apt_packages:
     - build-essential
+    - gfortran
     - python-setuptools
     - m4
 
@@ -35,8 +30,6 @@ before_install:
       LINUXBREW=/home/linuxbrew/.linuxbrew;
       git clone https://github.com/Linuxbrew/brew.git $LINUXBREW;
       export PATH="$LINUXBREW/bin:$PATH";
-      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5 --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-5;
-      export FC=/usr/bin/gfortran-5;
     fi
   - git -C "$(brew --repo)" reset --hard origin/master;
   - git -C "$(brew --repo)" clean -qxdff;
