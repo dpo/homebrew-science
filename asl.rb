@@ -3,7 +3,7 @@ class Asl < Formula
   homepage "http://www.ampl.com"
   url "https://github.com/ampl/mp/archive/3.1.0.tar.gz"
   sha256 "587c1a88f4c8f57bef95b58a8586956145417c8039f59b1758365ccc5a309ae9"
-  revision 1
+  revision 2
 
   bottle do
     cellar :any
@@ -33,14 +33,14 @@ class Asl < Formula
     system "cmake", ".", *cmake_args
     system "make", "all"
     system "make", "test" if build.with? "test"
-    system "install_name_tool", "-change", "@rpath/libmp.3.dylib", lib/"libmp.dylib", "bin/libasl.dylib"
+    system "install_name_tool", "-change", "@rpath/libmp.3.dylib", lib/"libmp.dylib", "bin/libasl.dylib" if OS.mac?
     system "make", "install"
     mkdir libexec
     mv bin, libexec/"bin"
 
     if build.with? "matlab"
       mkdir_p (pkgshare/"matlab")
-      mv Dir["#{libexec}/bin/*.mexmaci64"], (pkgshare/"matlab")
+      mv Dir["#{libexec}/bin/*.mex*"], (pkgshare/"matlab")
     end
 
     resource("miniampl").stage do
