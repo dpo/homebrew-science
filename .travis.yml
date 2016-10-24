@@ -10,14 +10,6 @@ matrix:
       sudo: required
       dist: trusty
 
-addons:
-  apt:
-  apt_packages:
-    - build-essential
-    - gfortran
-    - python-setuptools
-    - m4
-
 before_install:
   - if [ -f ".git/shallow" ]; then
       travis_retry git fetch --unshallow;
@@ -41,11 +33,6 @@ before_install:
   - chmod 0644 $(brew --repo)/Library/Taps/homebrew/homebrew-science/*.rb;
   - export TRAVIS_BUILD_DIR="$(brew --repo)/Library/Taps/homebrew/homebrew-science";
   - env | grep TRAVIS | tee /tmp/travis.env
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      ln -s $(which gcc) $LINUXBREW/bin/gcc-$(gcc -dumpversion |cut -d. -f1,2);
-      ln -s $(which g++) $LINUXBREW/bin/g++-$(g++ -dumpversion |cut -d. -f1,2);
-      ln -s $(which gfortran) $LINUXBREW/bin/gfortran;
-    fi
 
 install:
   - export HOMEBREW_DEVELOPER="1"
