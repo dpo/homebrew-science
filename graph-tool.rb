@@ -34,7 +34,7 @@ class GraphTool < Formula
   option "without-numpy", "Use a numpy you've installed yourself instead of a Homebrew-packaged numpy"
   option "without-python", "Build without python2 support"
   option "without-scipy", "Use a scipy you've installed yourself instead of a Homebrew-packaged scipy"
-  option "with-openmp", "Enable parallel algorithms with OpenMP (requires GCC or clang >= 3.8)"
+  option "with-openmp", "Enable OpenMP multithreading"
 
   cxx11 = MacOS.version < :mavericks ? ["c++11"] : []
 
@@ -84,6 +84,8 @@ class GraphTool < Formula
       cause "GCC 6 fails with 'Internal compiler error' on Mavericks. You should install GCC 5 instead with 'brew tap homebrew/versions; brew install gcc5"
     end
   end
+
+  needs :openmp if build.with? "openmp"
 
   def install
     if MacOS.version == :mavericks && (Tab.for_name("boost").stdlib == "libcxx" || Tab.for_name("boost-python").stdlib == "libcxx")
