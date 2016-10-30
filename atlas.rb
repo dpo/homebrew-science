@@ -5,8 +5,8 @@ class Atlas < Formula
   sha256 "2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7"
 
   devel do
-    url "https://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.38/atlas3.11.38.tar.bz2"
-    sha256 "95ba430e959a3a9f209a0876019355550ea2ef181f7e95f87158f421eacda5d2"
+    url "https://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.39/atlas3.11.39.tar.bz2"
+    sha256 "584bd44572746142bf19348139530c18f4538ce41d94330ff86ede38c36eddc9"
   end
 
   fails_with :clang
